@@ -31,8 +31,10 @@
     padding: 1rem 3rem;
     text-align: center;
     margin-top: 2.5rem ;
+    border: none;
 
     &:hover {
         background-color: darken($bgColor, 10%);
+        cursor: pointer;
     }
 }
