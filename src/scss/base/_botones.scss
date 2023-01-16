@@ -5,10 +5,19 @@
 @include boton($amarillo, block);
 }
 .boton-verde{
-@include boton($verde, inline-block);
+  @include boton($verde, inline-block);
 }
 
 .alinear-derecha{
   display: flex;
   justify-content: flex-end ;
+}
+
+.boton-rojo-block{
+  
+  @include boton(red, block);
+}
+.boton-verde-block{
+  
+  @include boton($amarillo, block);
 }
