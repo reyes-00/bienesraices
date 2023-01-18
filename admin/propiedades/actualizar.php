@@ -27,6 +27,7 @@ if($id){
 $titulo = $propiedad['titulo'];
 $precio = $propiedad['precio'];
 $imagen = $propiedad['imagen'];
+
 $descripcion = $propiedad['descripcion'];
 $habitaciones = $propiedad['habitaciones'];
 $wc = $propiedad['wc'];
@@ -43,7 +44,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     
     $imagen = $_FILES['imagen'];
     
-
     $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
     $precio = mysqli_real_escape_string($db, $_POST['precio']);
     $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
@@ -58,6 +58,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     if($imagen['size'] > $medida){
       $errores[]="La imagen es muy grande";
     }
+    
 
     if(!$titulo){
       $errores[] = "El titulo es requerido.";
@@ -66,9 +67,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
       $errores[] = "El precio es requerido.";
     }
 
-    if(!$imagen['name'] || $imagen['error']){
-      $errores[]="La imagen es requerida";
-    }
     if(strlen($descripcion) < 20 ){
       $errores[] = "La descripcion debe ser mayor a 20 caracteres.";
     }
@@ -89,12 +87,38 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     }
 
     if(empty($errores)){
+
+      // Ubicacion de la carpetaImagenes
       $carpetaImagenes = '../../imagenes/';
+      
+      // Comprobamos si no existe la carpetaImagenes
       if(!is_dir($carpetaImagenes)){
         mkdir($carpetaImagenes);
       }
-      $nombreImagen = md5( uniqid(rand(),true) ) . ".jpg";
-      move_uploaded_file($imagen['tmp_name'], $carpetaImagenes .  $nombreImagen);
+
+      // Comprobamos si suben una nueva imagen
+      if($imagen['name']){
+        
+        // borramos la imagen previa
+        unlink($carpetaImagenes . $propiedad['imagen']);
+        
+        // Nombre unico para la imagen
+        $nombreImagen = md5( uniqid(rand(),true) ) . ".jpg";
+
+        // Movemos la ruta de la imagen
+        move_uploaded_file($imagen['tmp_name'], $carpetaImagenes .  $nombreImagen);
+        
+      }else{
+        // Si el name de la imagen viene vacio conservamos la ruta de la imagen anterior
+        $nombreImagen = $propiedad['imagen'];
+      }
+
+      $query = "UPDATE propiedades set titulo = '$titulo',precio = '$precio',imagen='$nombreImagen',descripcion = '$descripcion',habitaciones = $habitaciones,wc = $wc,estacionamiento = $estacionamiento,vendedorId = $vendedorId WHERE id = $id;";
+      $resultado = mysqli_query($db,$query);
+
+      if($resultado){
+        header('Location:' .BASE_URL . 'admin/index.php?resultado=2');
+      }
     }
 }
 ?>
