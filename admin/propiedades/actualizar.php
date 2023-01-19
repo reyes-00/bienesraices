@@ -5,6 +5,12 @@ $db =  conectarDB();
 require_once "../../includes/funciones.php";
 incluirTemplate("header");
 
+  
+$auth = estaAutenticado();
+// debuguear($auth);
+if(!$auth){
+  header('Location:'.BASE_URL);
+}
 $id = $_GET['id'];
 $id = filter_var($id, FILTER_VALIDATE_INT);
 

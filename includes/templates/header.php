@@ -1,6 +1,13 @@
-
+<?php 
+  
+  if(!isset($_SESSION)){
+    session_start();
+  }
+  $auth = $_SESSION['login'] ?? null;
+  
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,6 +34,9 @@
             <a href="<?php echo BASE_URL?>contacto.php">Contacto</a>
             <a href="<?php echo BASE_URL?>anuncios.php">Anuncios</a>
             <a href="<?php echo BASE_URL?>blog.php">Blog</a>
+            <?php if($auth) : ?>
+              <a href="<?php echo BASE_URL?>cerrar.php">Cerrar sesion</a>
+            <?php endif;?>
           </nav>
         </div>
 

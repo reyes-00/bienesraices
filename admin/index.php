@@ -1,9 +1,18 @@
 <?php
+ 
+
   require '../includes/config/database.php';
   $db =  conectarDB();
   require "../includes/funciones.php";
-  incluirTemplate("header");
   $mensaje = $_GET['resultado'] ?? null;
+  
+  $auth = estaAutenticado();
+  // debuguear($auth);
+  if(!$auth){
+    header('Location:'.BASE_URL);
+  }
+  
+  incluirTemplate("header");
  
   // Consulta para obtener los datos
   $query = "SELECT * FROM propiedades limit 5";

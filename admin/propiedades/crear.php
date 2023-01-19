@@ -5,6 +5,12 @@
   require_once "../../includes/funciones.php";
   incluirTemplate("header");
 
+  $auth = estaAutenticado();
+  // debuguear($auth);
+  if(!$auth){
+    header('Location:'.BASE_URL);
+  }
+
   $query = "SELECT * FROM vendedores ORDER BY nombre ASC";
   $vendedores = mysqli_query($db, $query);
 
